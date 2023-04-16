@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({super.key});
+  final bool active;
+  const CustomAppBar({super.key, required this.active});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
+      leading: active == true ? IconButton( 
+        onPressed: () {
+          Navigator.pop(context);
+        }, icon: Icon(Icons.arrow_back_ios, color: Colors.white,)) : Container(),
       centerTitle: true,
       backgroundColor: Color.fromARGB(255, 18, 18, 18),
       title: ShaderMask(

@@ -33,6 +33,8 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           );
         } else {
+          List<String> genrelist = responseBody["Genre"].split(",");
+          List<String> lang = responseBody["Language"].split(",");
           print(responseBody);
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
@@ -44,8 +46,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   year: responseBody["Year"],
                   runtime: responseBody["Runtime"],
                   imdb: responseBody["imdbRating"],
-                  lang: responseBody["Language"],
-                  genre: responseBody["Genre"],
+                  lang: lang[0],
+                  genre: genrelist,
                   director: responseBody["Director"],
                   actors: responseBody["Actors"],
                 );
@@ -65,7 +67,7 @@ class _SearchScreenState extends State<SearchScreen> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(active: false,),
       body: Container(
         width: screenWidth,
         height: screenHeight,
