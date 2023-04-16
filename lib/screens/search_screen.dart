@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:movies_search_app/screens/movie_screen.dart';
@@ -12,12 +14,11 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-    final _controller = TextEditingController();
+  final _controller = TextEditingController();
   late String character;
 
   Future<dynamic> getCharacter(String character) async {
-    String baseUrl =
-        'https://www.omdbapi.com/?t=$character&apikey=d7617849';
+    String baseUrl = 'https://www.omdbapi.com/?t=$character&apikey=d7617849';
 
     var url = Uri.parse(baseUrl);
 
@@ -26,17 +27,19 @@ class _SearchScreenState extends State<SearchScreen> {
     if (response.statusCode == 200) {
       if (response.body.isNotEmpty) {
         var responseBody = jsonDecode(response.body);
-        if (responseBody == "") {
+        if (responseBody["Response"] == "False") {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("Error:- Not found!"),
+             
             ),
           );
         } else {
           List<String> genrelist = responseBody["Genre"].split(",");
           List<String> lang = responseBody["Language"].split(",");
+          print(responseBody["Poster"].runtimeType);
           print(responseBody);
-          Navigator.of(context).pushReplacement(
+          Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) {
                 return MovieScreen(
@@ -62,16 +65,28 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
+  void clear() {
+    _controller.clear();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: CustomAppBar(active: false,),
+      appBar: const CustomAppBar(
+        active: false,
+      ),
       body: Container(
         width: screenWidth,
         height: screenHeight,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -85,7 +100,7 @@ class _SearchScreenState extends State<SearchScreen> {
             SizedBox(
               height: screenHeight / 4,
             ),
-            Text(
+            const Text(
               "Enter a movie/web-series name",
               style: TextStyle(
                 color: Colors.white,
@@ -105,6 +120,12 @@ class _SearchScreenState extends State<SearchScreen> {
                   decoration: const InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromARGB(255, 255, 68, 191),
+                        width: 0.50,
+                      ),
+                    ),
                     hintStyle: TextStyle(
                       fontFamily: "BentonSans",
                     ),
@@ -124,10 +145,12 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               child: TextButton(
                 style: TextButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 255, 68, 191),
+                  backgroundColor: const Color.fromARGB(255, 255, 68, 191),
                 ),
                 onPressed: () async {
-                   character = _controller.text.trim();
+                  character = _controller.text.trim();
+                  clear();
+                  FocusManager.instance.primaryFocus?.unfocus();
                   getCharacter(character);
                 },
                 child: Padding(

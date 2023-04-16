@@ -11,17 +11,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: active == true ? IconButton( 
         onPressed: () {
           Navigator.pop(context);
-        }, icon: Icon(Icons.arrow_back_ios, color: Colors.white,)) : Container(),
+        }, icon: const Icon(Icons.arrow_back_ios, color: Colors.white,)) : Container(),
       centerTitle: true,
-      backgroundColor: Color.fromARGB(255, 18, 18, 18),
+      backgroundColor: const Color.fromARGB(255, 18, 18, 18),
       title: ShaderMask(
-        shaderCallback: (bounds) => LinearGradient(
+        shaderCallback: (bounds) => const LinearGradient(
           colors: [
             Color.fromARGB(255, 255, 255, 255),
             Color.fromARGB(255, 255, 68, 191)
           ],
         ).createShader(bounds),
-        child: Text(
+        child: const Text(
           "O M D B",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
         ),
@@ -31,5 +31,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(60);
+  Size get preferredSize => const Size.fromHeight(60);
 }
